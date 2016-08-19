@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Users per project</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/projects">TEAHub</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profile <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/profile">Edit profile</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/">Log out</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Logo</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    <br/><br/><br/>
+
+    <div class="container theme-showcase" role="main">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li><a href="/projects">Home</a></li>
+                <li><a href="/project_details">Project A</a></li>
+                <li class="active">Users</li>
+            </ol>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <label>List of users associated to the project</label>
+                <ul class="list-group">
+                    <li class="list-group-item">One user</li>
+                    <li class="list-group-item">Another user</li>
+                    <li class="list-group-item">Another extra user</li>
+                </ul>
+            </div>
+            <div class="col-md-2">
+                <br/><br/>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">=></button>
+                <br/>
+                <button class="btn btn-lg btn-primary btn-block" type="submit"><=</button>
+            </div>
+            <div class="col-md-5">
+                <label>List of users associated to the project</label>
+                <ul class="list-group">
+                    <li class="list-group-item">Dimitrios Charoulis</li>
+                    <li class="list-group-item"><b>Erik Janssen</b></li>
+                    <li class="list-group-item">Jose Ceron</li>
+                    <li class="list-group-item">Leonor Boga</li>
+                    <li class="list-group-item">Mahya Mirtar</li>
+                    <li class="list-group-item">Maria Dominguez</li>
+                    <li class="list-group-item">Martin Kok</li>
+                    <li class="list-group-item">Vijay Kiran</li>
+                </ul>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-md-2">
+                <a href="/project_details" class="btn btn-primary" role="button">Save</a>
+            </div>
+        </div>
+        <br/>
+    </div>
+
+    <footer class="panel-footer">
+        <div class=container>
+            <p><a href=https://github.com/lunatech-labs/teahub>TEAHub</a></p>
+            <p><a href=http://www.lunatech.com/>Lunatech Labs, B.V.</a> 2016</p>
+        </div>
+    </footer>
+</body>
+
+</html>
