@@ -1,6 +1,7 @@
 GET     /                       controllers.Home.index
 GET     /login                  controllers.User.login
 GET     /projects               controllers.Project.list
+GET     /projectsSetup          controllers.Project.setup
 GET     /project_details        controllers.Project.details
 GET     /profile                controllers.User.profile
 GET     /new_project            controllers.Project.newProject

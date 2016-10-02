@@ -14,8 +14,8 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test,
-  "com.adrianhurt" %% "play-bootstrap" % "1.0-P25-B3"
+  "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3"
 )
+
 routesGenerator := InjectedRoutesGenerator
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
-

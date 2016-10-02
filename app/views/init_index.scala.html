@@ -1,19 +1,22 @@
-@(fooForm: Form[String])(implicit messages: Messages)
+@()(implicit messages: Messages)
 
 @import helper.Implicits._
 @import b3.vertical.fieldConstructor
 
 @init_main("Welcome to TEAHub") {
-    <div class="page-header">
-        <h1>Welcome to TEAHub, have a cup.</h1>
-    </div>
-    <div class="row">
-        @b3.vertical.form(routes.Home.index) { implicit vfc =>
-            @b3.email( fooForm("email"), '_label -> "GitHub account", 'placeholder -> "example@mail.com" )
-            @b3.password( fooForm("password"), '_label -> "Password", 'placeholder -> "Password" )
-            @b3.checkbox( fooForm("remember"), '_text -> "Remember me", 'value -> true )
-            @b3.submit('class -> "btn btn-default"){ Sign in }
-        }
-        <a href="/projects">Go to projects</a>
+    <div class="container theme-showcase" role="main">
+        <div class="container-main">
+            <div class="row">
+                <div class="col-md-8">
+
+                    <div style="height: 150px">
+                        <h1>Welcome to TEAHub, have a cup.</h1>
+                        <p>Here you will see a description of TEAHub.</p>
+
+                        <a href="/projectsSetup" class="btn btn-primary" role="button">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 }
