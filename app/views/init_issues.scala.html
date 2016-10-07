@@ -9,13 +9,7 @@
 
     <br/><br/><br/>
     <div class="container theme-showcase" role="main">
-        <div class="row">
-            <ol class="breadcrumb">
-                <li><a href="/projects">Home</a></li>
-                <li><a href="/project_details">Project A</a></li>
-                <li class="active">Issue 15</li>
-            </ol>
-        </div>
+        @common.navigation(Seq(("Home", "/projects"), ("Project A","/project_details")), "Issue 15")
         <div class="row">
             <h1>Project A</h1>
             <h2>Issue #17: Creating Front End Mockup</h2>
@@ -59,7 +53,7 @@
                     <td>2</td>
                 </tr>
                 <tr>
-                    <td>Maria Dominguez/td>
+                    <td>Maria Dominguez</td>
                     <td>Implementing static mockups</td>
                     <td>5</td>
                 </tr>
