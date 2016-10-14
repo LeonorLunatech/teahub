@@ -1,4 +1,4 @@
-@(fooForm: Form[String])(implicit messages: Messages)
+@(togglTokenForm: Form[String])(implicit messages: Messages)
 
 @import b3.vertical.fieldConstructor
 
@@ -11,8 +11,8 @@
                 <div class="col-md-8">
                     <div style="height: 150px">
 
-                        @b3.form(routes.Project.list) {
-                            @b3.text(fooForm("foo"), 'label -> "token", 'placeholder -> "Please insert Toggle token")
+                        @b3.form(routes.UIController.list) {
+                            @b3.text(togglTokenForm("togglToken"), '_label -> "token", 'placeholder -> "Please insert Toggle token")
                             <a href="/projects" class="btn btn-primary" role="button">Login</a>
                         }
                     </div>
