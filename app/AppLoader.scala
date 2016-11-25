@@ -33,7 +33,7 @@ class AppLoader extends ApplicationLoader {
   *                web command handler, and optional source mapper */
 class AppComponent(context: Context)(implicit val ec: ExecutionContext) extends BuiltInComponentsFromContext(context) with I18nComponents {
   lazy val togglService = new ApiTogglService(AhcWSClient())
-  lazy val uiController = new UIController(messagesApi)(ec)
+  lazy val uiController = new UIController(AhcWSClient(), messagesApi)(ec)
   lazy val teahubController = new TEAHubController(togglService)
   lazy val assetsController = new controllers.Assets(httpErrorHandler)
 
