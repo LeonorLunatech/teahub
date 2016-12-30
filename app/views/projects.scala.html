@@ -1,6 +1,6 @@
 @()
 
-@init_main("Projects") {
+@main("Projects") {
     <!-- Fixed navbar -->
     @common.top_navigation()
 
@@ -8,40 +8,41 @@
 
     <div class="container theme-showcase" role="main">
         @common.navigation(Seq(("Home", "")), "")
+        <p>Here we load the TEAHub projects and allow the user to create new projects.</p>
         <div class="container-main">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Project name</th>
-                                <th>Estimation</th>
-                                <th>Issues</th>
-                                <th>Milestones</th>
+                                <th>Number of issues (estimated / non estimated)</th>
+                                <th>Total estimation in hours</th>
+                                <th>Milestones date</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>1</td>
                                 <td><a href="/project_details">TEAHub</a></td>
+                                <td>21 (4/17)</td>
                                 <td>20</td>
-                                <td>4</td>
-                                <td>1</td>
+                                <td>10/10/2016</td>
                             </tr>
                             <tr>
                                 <td>2</td>
                                 <td>Phylax</td>
-                                <td>28</td>
-                                <td>10</td>
-                                <td>-</td>
+                                <td>21 (4/17)</td>
+                                <td>20</td>
+                                <td>10/10/2016</td>
                             </tr>
                             <tr>
                                 <td>3</td>
                                 <td>Proximio</td>
-                                <td>35</td>
-                                <td>7</td>
-                                <td>5</td>
+                                <td>21 (4/17)</td>
+                                <td>20</td>
+                                <td>10/10/2016</td>
                             </tr>
                         </tbody>
                     </table>

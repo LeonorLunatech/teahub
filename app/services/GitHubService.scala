@@ -14,7 +14,7 @@ trait GitHubService {
     * @param oauthToken Authentication token which is received from Github
     * @return a Future List of Github repositories
     */
-  def getGitHubProjects(oauthToken: String): Future[List[String]]
+  def getGitHubProjects(oauthToken: Option[String]): Future[List[String]]
 }
 
 

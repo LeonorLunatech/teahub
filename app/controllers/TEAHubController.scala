@@ -1,12 +1,13 @@
 package controllers
 
 import java.util.concurrent.TimeUnit
-import play.api.libs.json.Json
+
 import play.api.cache.CacheApi
-import play.api.mvc.Action
-import play.api.mvc._
+import play.api.libs.json.Json
+import play.api.mvc.{Action, _}
 import services.TogglService
 import services.impl.ApiGitHubService
+
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -55,11 +56,8 @@ class TEAHubController(togglService: TogglService, apiGitHubService: ApiGitHubSe
     * @return A json object containing the list of GitHub repositories.
     */
   def githubRepositories = Action.async { implicit request =>
-     val result: Future[List[String]] = request.session.get("oauth-token").map { token =>
-      apiGitHubService.getGitHubProjects(token)
-    }.getOrElse(Future.successful(List.empty))
-
-    result.map(res => Ok(Json.obj("repositories" -> res)))
+    val oauthToken = cacheApi.get("authToken")
+    val list: Future[List[String]] = apiGitHubService.getGitHubProjects(oauthToken)
+    list.map {res => Ok(Json.obj("repositories" -> res))}
   }
-
 }

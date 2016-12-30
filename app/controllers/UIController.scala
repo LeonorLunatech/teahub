@@ -20,18 +20,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class UIController @Inject()(ws: WSClient, val messagesApi: MessagesApi)(implicit executionContext: ExecutionContext) extends Controller with I18nSupport {
   val togglTokenForm = Form(single("togglToken" -> text(maxLength = 20)))
 
-  def index = Action { implicit request => Ok(views.html.init_index()) }
-  def management = Action { implicit request => Ok(views.html.init_user_management()) }
-  def list = Action { implicit request => Ok(views.html.init_projects()) }
-  def setup = Action { implicit request => Ok(views.html.init_setup_projects(togglTokenForm)) }
-  def details = Action { implicit request => Ok(views.html.init_project_details()) }
-  def usersProject = Action { implicit request => Ok(views.html.init_user_project()) }
-  def issues = Action { implicit request => Ok(views.html.init_issues()) }
-  def login = Action { implicit request => Ok(views.html.init_login()) }
-  def profile = Action { implicit request => Ok(views.html.init_profile()) }
-
-  def newProject = Action { implicit request => Ok(views.html.init_new_project(newProjectForm)) }
-  def CreateNewProject = Action { implicit request => Ok(views.html.init_new_project(newProjectForm)) }
+  def index = Action { implicit request => Ok(views.html.index("Welcome to TeaHub", "")) }
+  def management = Action { implicit request => Ok(views.html.user_management()) }
+  def list = Action { implicit request => Ok(views.html.projects()) }
+  def setup = Action { implicit request => Ok(views.html.setup_projects(togglTokenForm)) }
+  def details = Action { implicit request => Ok(views.html.project_details()) }
+  def issues = Action { implicit request => Ok(views.html.issues()) }
+  def profile = Action { implicit request => Ok(views.html.profile()) }
 
   def getAllGitHubProjects(username: String) = Action.async { implicit request =>
     //https://developer.github.com/v3/repos/
@@ -64,4 +59,3 @@ class UIController @Inject()(ws: WSClient, val messagesApi: MessagesApi)(implici
       "projectName" -> nonEmptyText
     )(NewProject.apply)(NewProject.unapply))
 }
-

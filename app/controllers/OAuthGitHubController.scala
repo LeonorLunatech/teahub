@@ -1,16 +1,21 @@
 package controllers
 
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+
+import play.api.cache.CacheApi
 import play.api.mvc._
 import services.impl.ApiOAuthGitHubService
+
+import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
-import routes.TEAHubController
 
 /**
   * This is the controller responsible for the actions related to OAuth authentication between TEAHub and GitHub.
   * @param oauthGitHubService helper service for authentication
   * @param executionContext the execution context for asynchronous execution of program logic
   */
-class OAuthGitHubController(oauthGitHubService: ApiOAuthGitHubService)
+class OAuthGitHubController @Inject()(oauthGitHubService: ApiOAuthGitHubService, cache: CacheApi)
                            (implicit executionContext: ExecutionContext) extends Controller {
 
   /**
@@ -55,9 +60,9 @@ class OAuthGitHubController(oauthGitHubService: ApiOAuthGitHubService)
     * @return A json object containing the list of GitHub repositories.
     */
   def success() = Action.async { request =>
-    request.session.get("oauth-token").fold(Future.successful(Unauthorized("401 Authentication token not found!"))) { authToken =>
-      Future(Redirect(TEAHubController.githubRepositories())
-      )
+    request.session.get("oauth-token").fold(Future.successful(Unauthorized("No way Jose"))) { authToken =>
+      cache.set("authToken", authToken, Duration(60, TimeUnit.SECONDS))
+      Future(Redirect(routes.TEAHubController.githubRepositories()))
     }
   }
 }
