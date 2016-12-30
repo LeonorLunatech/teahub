@@ -1,19 +1,30 @@
 package controllers
 
+import java.util.concurrent.TimeUnit
 import play.api.libs.json.Json
 import play.api.cache.CacheApi
 import play.api.mvc.Action
 import play.api.mvc._
 import services.TogglService
+import services.impl.ApiGitHubService
+import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 
-/** Is a controller for the project
-  *
-  * @param togglService Service that requests Toggl the list of the projects */
-class TEAHubController(togglService: TogglService, cache: CacheApi)(implicit executionContext: ExecutionContext) extends Controller {
-  /** Request List of Toggl projects' name from Toggl API and show it in TEAHub UI
+/**
+  * This is the controller responsible for the actions related to communication between TEAHub and GitHub/Toggl.
+  * @param togglService the service that makes the requests to Toggl
+  * @param apiGitHubService the service that makes the requests to GitHub
+  * @param cacheApi the application cache
+  * @param executionContext the execution context for asynchronous execution of program logic
+  */
+class TEAHubController(togglService: TogglService, apiGitHubService: ApiGitHubService, cacheApi: CacheApi)
+                      (implicit executionContext: ExecutionContext) extends Controller {
+
+  /**
+    * Get list of Toggl projects
+    * @return A json object containing the list of Toggl projects
     */
-  //TODO: So far this method just takes the projects name in future it should show the result in the related page in TEAHUB
+  //TODO: This method just takes the project names; in future it should show the result in the related page in TEAHUB.
   def togglProjects = Action.async { implicit request =>
 
     def cacheKey(apiKey: String) = s"ProjectName.$apiKey"
@@ -22,10 +33,10 @@ class TEAHubController(togglService: TogglService, cache: CacheApi)(implicit exe
 
     val result: Future[List[String]] = toggleToken match {
       case Some(token) => {
-        cache.get[Future[List[String]]](cacheKey(token)) match {
+        cacheApi.get[Future[List[String]]](cacheKey(token)) match {
           case None =>
             val projectsName = togglService.getTogglProjects(token)
-            cache.set(cacheKey(token), projectsName)
+            cacheApi.set(cacheKey(token), projectsName, Duration(60, TimeUnit.SECONDS))
             projectsName
           case Some(list) => list
         }
@@ -38,4 +49,17 @@ class TEAHubController(togglService: TogglService, cache: CacheApi)(implicit exe
         Ok(Json.obj("Projects" -> theResult))
     }
   }
+
+  /**
+    * Get list of GitHub repositories
+    * @return A json object containing the list of GitHub repositories.
+    */
+  def githubRepositories = Action.async { implicit request =>
+     val result: Future[List[String]] = request.session.get("oauth-token").map { token =>
+      apiGitHubService.getGitHubProjects(token)
+    }.getOrElse(Future.successful(List.empty))
+
+    result.map(res => Ok(Json.obj("repositories" -> res)))
+  }
+
 }

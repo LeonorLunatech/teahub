@@ -1,10 +1,11 @@
-import controllers.{TEAHubController, UIController}
+import com.typesafe.config.Config
+import controllers.{OAuthGitHubController, TEAHubController, UIController}
 import play.api.{Application, ApplicationLoader, BuiltInComponentsFromContext, LoggerConfigurator}
 import play.api.ApplicationLoader.Context
 import play.api.cache.EhCacheComponents
 import play.api.i18n.I18nComponents
 import play.api.libs.ws.ahc.AhcWSClient
-import services.impl.ApiTogglService
+import services.impl.{ApiGitHubService, ApiOAuthGitHubService, ApiTogglService}
 
 import scala.concurrent.ExecutionContext
 import router.Routes
@@ -13,11 +14,13 @@ import router.Routes
   * Instantiates all parts of the application and wires everything together.
   */
 class AppLoader extends ApplicationLoader {
-  /** Loads the application given the context
-    *
-    * @param context is the context for loading an application. It includes Environment, initial configuration,
-    *                web command handler, and optional source mapper
-    **/
+
+  /**
+    * Loads the application given the context
+    * @param context is the context for loading an application (includes Environment, initial configuration, web
+    *                command handler and optional source mapper
+    * @return the created application
+    */
   override def load(context: Context): Application = {
     implicit val ec: ExecutionContext = play.api.libs.concurrent.Execution.defaultContext
 
@@ -28,20 +31,29 @@ class AppLoader extends ApplicationLoader {
   }
 }
 
-/** Provides all the built in components dependencies from the application loader context
-  *
-  * @param context is the context for loading an application. It includes Environment, initial configuration,
-  *                web command handler, and optional source mapper */
+/**
+  * Provides all the built in components dependencies from the application loader context
+  * @param context is the context for loading an application.
+  * @param ec implicit execution context for asynchronous execution of program logic
+  */
 class AppComponent(context: Context)(implicit val ec: ExecutionContext) extends BuiltInComponentsFromContext(context)
-  with EhCacheComponents with I18nComponents{
+  with EhCacheComponents with I18nComponents {
+
+  val config: Config = context.initialConfiguration.underlying
+
+  lazy val oauthGitHubService = new ApiOAuthGitHubService(config, AhcWSClient())
+  lazy val oauthGitHubController = new OAuthGitHubController(oauthGitHubService)
+  lazy val gitHubService = new ApiGitHubService(AhcWSClient())
   lazy val togglService = new ApiTogglService(AhcWSClient())
-  lazy val uiController = new UIController(AhcWSClient(), messagesApi)(ec)
-  lazy val teahubController = new TEAHubController(togglService,defaultCacheApi)
+  lazy val teahubController = new TEAHubController(togglService, gitHubService, defaultCacheApi)
+  lazy val uiController = new UIController(AhcWSClient(), messagesApi)
   lazy val assetsController = new controllers.Assets(httpErrorHandler)
 
-  lazy val router = new Routes(httpErrorHandler,
+  lazy val router = new Routes(
+    httpErrorHandler,
     uiController,
     teahubController,
+    oauthGitHubController,
     assetsController
   )
 }
