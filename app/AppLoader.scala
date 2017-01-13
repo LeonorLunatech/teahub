@@ -5,6 +5,7 @@ import play.api.ApplicationLoader.Context
 import play.api.cache.EhCacheComponents
 import play.api.i18n.I18nComponents
 import play.api.libs.ws.ahc.AhcWSClient
+import play.api.i18n._
 import services.impl.{ApiGitHubService, ApiOAuthGitHubService, ApiTogglService}
 
 import scala.concurrent.ExecutionContext
@@ -48,12 +49,13 @@ class AppComponent(context: Context)(implicit val ec: ExecutionContext) extends 
   lazy val teahubController = new TEAHubController(togglService, gitHubService, defaultCacheApi)
   lazy val uiController = new UIController(AhcWSClient(), messagesApi)
   lazy val assetsController = new controllers.Assets(httpErrorHandler)
+  lazy val uiController = new UIController(messagesApi)(ec)
 
   lazy val router = new Routes(
     httpErrorHandler,
+    oauthGitHubController,
     uiController,
     teahubController,
-    oauthGitHubController,
     assetsController
   )
 }

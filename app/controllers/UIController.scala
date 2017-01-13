@@ -1,67 +1,27 @@
 package controllers
 
-import javax.inject.{Inject, Singleton}
-
-import models.NewProject
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.JsArray
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.{Action, Controller}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
-
-@Singleton
 /**
-  * Controller for front end
+  * This controller is mainly responsible for linking the mockups.
+  * @param messagesApi the messagesAPI for internationalisation.
+  * @param executionContext the execution context for asynchronous execution of program logic
   */
-class UIController @Inject()(ws: WSClient, val messagesApi: MessagesApi)(implicit executionContext: ExecutionContext) extends Controller with I18nSupport {
-  val togglTokenForm = Form(single("togglToken" -> text(maxLength = 20)))
+class UIController(val messagesApi: MessagesApi)(implicit executionContext: ExecutionContext) extends Controller with I18nSupport {
+  val togglTokenForm = Form(single("togglToken" -> text()))
+  val projectName = Form(single("projectName" -> text()))
 
-  def index = Action { implicit request => Ok(views.html.init_index()) }
-  def management = Action { implicit request => Ok(views.html.init_user_management()) }
-  def list = Action { implicit request => Ok(views.html.init_projects()) }
-  def setup = Action { implicit request => Ok(views.html.init_setup_projects(togglTokenForm)) }
-  def details = Action { implicit request => Ok(views.html.init_project_details()) }
-  def usersProject = Action { implicit request => Ok(views.html.init_user_project()) }
-  def issues = Action { implicit request => Ok(views.html.init_issues()) }
-  def login = Action { implicit request => Ok(views.html.init_login()) }
-  def profile = Action { implicit request => Ok(views.html.init_profile()) }
+  def management = Action { implicit request => Ok(views.html.user_management()) }
+  def list = Action { implicit request => Ok(views.html.projects()) }
+  def setup = Action { implicit request => Ok(views.html.setup_projects(togglTokenForm)) }
+  def details = Action { implicit request => Ok(views.html.project_details()) }
+  def newProject = Action { implicit request => Ok(views.html.init_new_project(projectName)) }
+  def issues = Action { implicit request => Ok(views.html.issues()) }
+  def profile = Action { implicit request => Ok(views.html.profile()) }
 
-  def newProject = Action { implicit request => Ok(views.html.init_new_project(newProjectForm)) }
-  def CreateNewProject = Action { implicit request => Ok(views.html.init_new_project(newProjectForm)) }
-
-  def getAllGitHubProjects(username: String) = Action.async { implicit request =>
-    //https://developer.github.com/v3/repos/
-    val url = "https://api.github.com/users/LeonorLunatech/repos"
-    val request: WSRequest = ws.url(url)
-
-    val futureResponse: Future[WSResponse] = request.get()
-
-    val projects = futureResponse.map {
-      response => {
-        val projects = response.json.as[JsArray].value
-        for (proj <- projects)
-          yield (proj \ "svn_url").as[String]
-      }
-    }
-
-    val map = projects.map(projs => projs.map(p => p -> p))
-
-    projects.map(p => Ok(p.toString))
-  }
-
-  def getAllToggleProjects(username: String) = Action.async { implicit request =>
-    Future.successful(Ok("ToggleProject1, ToggleProject2 "))
-  }
-
-  val newProjectForm = Form(
-    mapping(
-      "githubProject" -> nonEmptyText,
-      "toggleProject" -> nonEmptyText,
-      "projectName" -> nonEmptyText
-    )(NewProject.apply)(NewProject.unapply))
 }
-
