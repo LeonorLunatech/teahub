@@ -47,7 +47,6 @@ class AppComponent(context: Context)(implicit val ec: ExecutionContext) extends 
   lazy val gitHubService = new ApiGitHubService(AhcWSClient())
   lazy val togglService = new ApiTogglService(AhcWSClient())
   lazy val teahubController = new TEAHubController(togglService, gitHubService, defaultCacheApi)
-  lazy val uiController = new UIController(AhcWSClient(), messagesApi)
   lazy val assetsController = new controllers.Assets(httpErrorHandler)
   lazy val uiController = new UIController(messagesApi)(ec)
 
